@@ -3,12 +3,13 @@ CC=$(TARGET)-gcc
 AS=$(TARGET)-as
 CFLAGS=-c -Wall -std=gnu99 -ffreestanding -O2 -Wextra
 
-SOURCES=kernel.c
-OBJECTS=kernel.o
+DEPS=fb.h
+SOURCES=fb.c kernel.c fb.c
+OBJECTS=fb.o kernel.o
 
 all: $(SOURCES) boot.iso
 
-$(OBJECTS): $(SOURCES)
+%.o: %.c $(DEPS)
 	$(CC) $(CFLAGS) $< -o $@ 
 
 kernel.bin: boot.o $(OBJECTS) linker.ld

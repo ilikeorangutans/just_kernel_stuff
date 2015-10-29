@@ -1,30 +1,21 @@
-TARGET=i686-elf
-CC=$(TARGET)-gcc
-AS=$(TARGET)-as
-CFLAGS=-c -Wall -std=gnu99 -ffreestanding -O2 -Wextra
 
-DEPS=fb.h
-SOURCES=fb.c kernel.c fb.c
-OBJECTS=fb.o kernel.o
+.PHONY: all kernel clean clean-all
 
-all: $(SOURCES) boot.iso
+all: kernel boot.iso
 
-%.o: %.c $(DEPS)
-	$(CC) $(CFLAGS) $< -o $@ 
+kernel: 
+	$(MAKE) -w -C kernel
 
-kernel.bin: boot.o $(OBJECTS) linker.ld
-	$(CC) -T linker.ld -o kernel.bin -ffreestanding -O2 -nostdlib boot.o $(OBJECTS) -lgcc
-
-boot.iso: kernel.bin
-	cp kernel.bin iso/boot/kernel.bin
+boot.iso: 
+	mkdir -p iso/boot/grub
+	cp kernel/kernel.bin iso/boot/kernel.bin
 	grub-mkrescue -o boot.iso iso
-
-clean: 
-	rm *.o *.bin *.iso
-
-boot.o: boot.s
-	$(AS) boot.s -o boot.o
 
 run: boot.iso
 	qemu-system-i386 -cdrom boot.iso
 
+clean: 
+	rm boot.iso
+
+clean-all: clean
+	$(MAKE) -w -C kernel clean

@@ -6,9 +6,9 @@
 
 void terminal_initialize();
 
-size_t strlen(const char* str);
-
 void terminal_writestring(const char* data);
+
+void terminal_clear();
 
 #endif
 

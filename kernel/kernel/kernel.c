@@ -3,9 +3,7 @@
 #include <stdint.h>
 #include <kernel/terminal.h>
 
-void kernel_init() {
-
-}
+void kernel_init() {}
 
 void kernel_main() {
 
@@ -17,4 +15,3 @@ void kernel_main() {
     terminal_writestring("Hello, World!\n");
   }
 }
-
